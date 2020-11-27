@@ -1,0 +1,34 @@
+A = All url data to be fetched combined
+B = All data on S3 acquired by Procedure B
+C = All data in logs that should have been uploaded
+D = All 404s from both logs
+
+Procedure B:
+1) aws2 s3 ls s3://975435234474-global-goals --recursive > downloaded.txt
+2) sed -E 's/.*\/([0-9]{14})_(.*)/\1∞\2/g' downloaded.txt > B.csv
+3) split -d -n 2 B.csv --additional-suffix=.csv
+4) Open csv with excel (delimter='∞'), save as ods, save as csv (delimiter=',')
+4b) rm *.ods
+5) cat x* | sort > B.csv
+6) vim B.csv --> Remove rubbish records
+6) python reduceAWS.py
+--> matches = A union B
+--> Aonly   = A - B
+--> Bonly   = B - A
+
+Procedure C, D:
+1) Get logs using get_journalctl_logs.sh. Supply as argument a list of IPs
+2) cat log* > all_logs.txt
+3) log_parser.sh all_logs.txt --> Gives all uploaded files (C), and all 404s (D).
+4) Open csv with excel (delimter='∞'), save as ods, save as csv (delimiter=',')
+5) Sort if needed (sort C.csv > C_sorted.csv)
+5) comm -23 A.csv C.csv > A-C.csv
+6) comm -23 A.csv D.csv > A-D.csv
+
+
+Calculate A - B - C - D using comm
+
+Scripts used:
+- reduceAWS.py
+- get_journalctl_logs.sh
+- log_parser.sh

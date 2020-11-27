@@ -1,0 +1,14 @@
+---
+- hosts: aws_servers
+  become: yes
+
+  tasks:
+    - name: Register host index
+      set_fact:
+        host_index: "{{groups['aws_servers'].index(inventory_hostname)}}"
+
+    - name: Retrieve logs from server
+      fetch:
+        src: '/home/{{ gg_user }}/log{{ host_index }}.txt'
+        dest: 'logs/log{{ host_index }}.txt'
+        flat: yes

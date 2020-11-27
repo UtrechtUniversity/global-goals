@@ -1,0 +1,113 @@
+---
+- name: Install prerequisites
+  apt: name=software-properties-common state=present
+  become: true
+
+- name: Add deadsnakes repo
+  apt_repository: repo="ppa:deadsnakes/ppa"
+  become: true
+
+- name: Install Python
+  apt:
+    name: python3.7
+    update_cache: yes
+
+- name: download get-pip.py
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp/get-pip.py
+    mode: 0664
+
+- name: update
+  apt:
+    update_cache: yes
+
+- name: install pip for python3
+  shell: /usr/bin/python3.7 /tmp/get-pip.py
+  become: yes
+
+- name: install lynx
+  apt:
+    name: lynx
+
+- name: Install packages
+  shell: "/usr/bin/python3.7 -m pip install {{ item }}"
+  with_items:
+    - argparse
+    - boto3
+    - pathlib
+    - joblib==0.14.1
+    - tqdm
+    - pandas
+    
+- name: Create folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: '{{ gg_user }}'
+    group: '{{ gg_user }}'
+  with_items:
+    - /home/{{ gg_user }}/output/html
+    - /home/{{ gg_user }}/output/lynx
+    - /home/{{ gg_user }}/python
+
+
+- name: Copy python scripts
+  copy:
+    src: "{{ item }}"
+    dest: '/home/{{ gg_user }}/python/'
+    owner: '{{ gg_user }}'
+    group: '{{ gg_user }}'
+    mode: 0777
+  with_items:
+    - link_lyxer.py
+    - ext_link_listerAWS.py
+    - organisations.txt
+
+- name: Register host index
+  set_fact:
+    host_index: "{{groups['aws_servers'].index(inventory_hostname)}}"
+
+- name: get aws cli
+  pip:
+    name: awscli
+
+- name: Copy s3 credentials
+  copy: 
+    src: credentials
+    dest: '/home/{{ gg_user }}/.aws/'
+    owner: '{{ gg_user }}'
+    group: '{{ gg_user }}'
+
+- name: Copy source organizations list
+  copy:
+    src: 'orgs_{{ host_index }}'
+    dest: '/home/{{ gg_user }}/'
+    owner: '{{ gg_user }}'
+    group: '{{ gg_user }}'
+
+- name: Create folder list for loop in next step
+  shell: "cat /home/{{ gg_user }}/orgs_{{ host_index }}"
+  register: command_result
+
+- name: sync s3 directories 
+  command: "aws s3 sync s3://{{ bucket_name }}/{{ item }} /home/{{ gg_user }}/output/html/{{ item }}"
+  with_items:
+    - "{{ command_result.stdout_lines }}"
+  become: yes
+  become_user: '{{ gg_user }}'
+
+- name: Ansible create file if it doesn't exist example
+  file:
+    path: '/home/{{ gg_user }}/output/log2_i{{ host_index }}.txt'
+    state: touch
+  become: yes
+  become_user: '{{ gg_user }}'
+
+- name: Ansible create file if it doesn't exist example
+  file:
+    path: '/home/{{ gg_user }}/output/failed.txt'
+    state: touch
+  become: yes
+  become_user: '{{ gg_user }}'
+

@@ -1,0 +1,21 @@
+---
+- hosts: aws_servers
+  become: yes
+
+  pre_tasks:
+    - name: Ensure group exists
+      group:
+        name: "{{ gg_user }}"
+        state: present
+
+    - name: Add the user
+      user:
+        name: "{{ gg_user }}"
+        groups: "sudo,{{ gg_user }}"
+        state: present
+        shell: /bin/bash
+
+  roles:
+    - globalgoals_lyxer
+    - icommands
+

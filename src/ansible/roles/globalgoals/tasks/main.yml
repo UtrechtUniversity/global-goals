@@ -1,0 +1,55 @@
+---
+- name: Install Python
+  apt:
+    name: python3
+    update_cache: yes
+
+- name: Install pip
+  apt:
+    name: python3-pip
+
+- name: Install packages
+  pip:
+    name:
+      - argparse
+      - boto3
+      - htmlmin
+      - numpy
+      - tldextract
+      - requests
+      - pathlib
+
+- name: Copy python script
+  copy:
+    src: page_fetcher.py
+    dest: '/home/{{ gg_user }}/'
+    owner: '{{ gg_user }}'
+    group: '{{ gg_user }}'
+
+- name: Register host index
+  set_fact:
+    host_index: "{{groups['aws_servers'].index(inventory_hostname)}}"
+
+- name: Copy csv data
+  copy:
+    src: 'data{{ host_index }}.csv'
+    dest: '/home/{{ gg_user }}/data{{ host_index }}.csv'
+
+- name: Register csv & log path
+  set_fact:
+    csv_file: '/home/{{ gg_user }}/data{{ host_index }}.csv'
+    log_file: '/home/{{ gg_user }}/log{{ host_index }}.txt'
+
+- name: Template systemd service
+  template:
+    src: globalgoals.service.j2
+    dest: /etc/systemd/system/globalgoals.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Start systemd service
+  systemd:
+    name: globalgoals.service
+    state: started
+    daemon_reload: yes

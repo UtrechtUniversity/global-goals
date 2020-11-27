@@ -1,0 +1,26 @@
+[Unit]
+
+Description=Service for Global Goals project
+
+[Service]
+
+# Command to execute when the service is started
+ExecStart=/usr/bin/python3 /home/{{ gg_user }}/page_fetcher.py --data={{ csv_file }} --bucket_name={{ bucket_name }} --log={{ log_file }}
+
+# Disable Python's buffering of STDOUT and STDERR, so that output from the
+# service shows up immediately in systemd's logs
+Environment=PYTHONUNBUFFERED=1
+Environment=AWS_ACCESS_KEY_ID={{ aws_access_key }} 
+Environment=AWS_SECRET_ACCESS_KEY={{ aws_secret_key }}
+
+# Automatically restart the service if it crashes
+Restart=always
+
+# Our service will notify systemd once it is up and running
+Type=notify
+WatchdogSec=600
+NotifyAccess=all
+
+# Use a dedicated user to run our service
+User={{ gg_user }}
+

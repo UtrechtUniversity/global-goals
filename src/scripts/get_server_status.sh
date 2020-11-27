@@ -1,0 +1,1 @@
+cat instances.txt | while read line; do printf "$line\t";  ssh ubuntu@$line 'status=$(cat /tmp/status); all=$(cat /home/aztec/`(ls /home/aztec | grep data)` | wc -l);  read div < <(bc <<< "scale=2; $status / $all"); printf "$line \t $status \t $all \t $div \n"' < /dev/null; done
