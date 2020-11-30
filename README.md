@@ -1,9 +1,88 @@
-# GlobalGoals
-The goal of this project is to obtain hyperreferences from organisations' websites from 2012 up to 2019. The older websites are obtained via the Internet Archive.
+# Global Goals
 
-## Project Workflow
+<!-- Include Github badges here (optional) -->
+<!-- e.g. Github Actions workflow status -->
+![workflow name](https://github.com/UtrechtUniversity/<REPOSITORY>/workflows/<WORKFLOW_NAME_OR_FILE_PATH>/badge.svg)
+
+The goal of this project is to obtain historical hyperlinks among a given set of Non Governmental Organizations (NGO's).
+The hyperlinks are retrieved from the oranizations' websites from 2012 up to 2019 via the Internet Archive.
+
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+
+- [Project Title](#global-goals)
+  - [Table of Contents](#table-of-contents)
+  - [About the Project](#about-the-project)
+    - [License](#license)
+    - [Attribution and academic use](#attribution-and-academic-use)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+  - [Usage](#local-usage)
+  - [Ansible workflow](#ansible-workflow)
+  - [Contact](#contact)
+
+<!-- ABOUT THE PROJECT -->
+## About the Project
+
+**Date**: Month Year
+
+**Researcher(s)**:
+
+- Maya Bogers (m.j.bogers@uu.nl)
+
+**Research Software Engineer(s)**:
+
+- Jelle Treep (h.j.treep@uu.nl)
+- Martine de Vos (m.g.devos@uu.nl)
+
+<!-- Do not forget to also include the license in a separate file(LICENSE[.txt/.md]) and link it properly. -->
+### License
+
+The code in this project is released under [LICENSE.md](LICENSE).
+
+### Attribution and academic use
+
+What to include here depends on the project type.
+
+If a paper has been published introducing this code, include a reference to that paper:
+[Example](https://github.com/OceanParcels/parcels#parcels-manuscript-and-code)
+
+If the software has been published on its own, include a reference to that:
+[Example](https://github.com/asreview/asreview#citation)
+
+If a dataset has been published from this repository, include a persistent link to the dataset:
+[Example](https://github.com/J535D165/CoronaWatchNL#license-and-academic-use)
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+Guide to get a local copy of this project up and running.
+
+### Prerequisites
+
+To install and run this project you need to have the following prerequisites installed.
+
+- Ansible
+- Python
+
+### Installation
+
+To run the project, ensure to install the project's dependencies.
+
+```sh
+pip install -r requirements.txt
+```
+
+<!-- USAGE -->
+## Local Usage 
+
 The project consists of four stages as listed below. In short: 
 > cdx record -> html -> all links -> filtered links.
+
+If a fairly large amount of url's needs to be obtained, multiple servers should be used. 
+These servers can be populated using Ansible, see [Ansible workflow](#ansible-workflow). In that case the workflow looks like:
+> obtain cdx records -> split records -> setup AWS -> deploy to servers -> fetch logs -> obtain status (-> redo)
 
 ### Stage 1: Fetching CDX Records (cdx_record_fetcher)
 A CDX Record is a record from the [CDX Api](https://github.com/internetarchive/wayback/tree/master/wayback-cdx-server) of the Internet Archive. Such a record consists of an url_key and a timestamp. An example would be:
@@ -43,10 +122,8 @@ The source and destination are separated by a delimiter (`∞`), which was picke
 ### Stage 4: Filtering links (ext_link_lister)
 TODO
 
-
 ## Ansible Workflow
-If a fairly large amount of url's needs to be obtained, multiple servers should be used. These servers can be populated using Ansible. It's workflow is this:
-> obtain cdx records -> split records -> setup AWS -> deploy to servers -> fetch logs -> obtain status (-> redo)
+If a fairly large amount of url's needs to be obtained, multiple servers should be used. These servers can be populated using Ansible.
 
 ### Stage 1: Obtain the data to fetch
 Using the Project Workflow it should be possible to start with a list of organisation domains and end up with a lot of csv's containing CDX Records. These csv files can be combined in the following manner:
@@ -222,3 +299,10 @@ If you suspect a line-ending error, run `dos2unix` for both files. Please be awa
 ### Stage 7: Redo
 When computing A -B -C -D using `comm`, it could be that not all data has been fetched. Start from Stage2 using the subtracted data. Be sure to separate the session's logs and data for proper bookkeeping. For example, split both C.csv files by using C1.csv and C2.csv as filenames.
 
+
+<!-- CONTACT -->
+## Contact
+
+Contact Name - research.engineering@uu.nl
+
+Project Link: [https://github.com/UtrechtUniversity/global-goals](https://github.com/UtrechtUniversity/global-goals)
