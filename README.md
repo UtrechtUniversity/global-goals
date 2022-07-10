@@ -4,7 +4,7 @@
 <!-- e.g. Github Actions workflow status -->
 ![workflow name](https://github.com/UtrechtUniversity/<REPOSITORY>/workflows/<WORKFLOW_NAME_OR_FILE_PATH>/badge.svg)
 
-The goal of this project is to obtain historical hyperlinks among a given set of Non Governmental Organizations (NGO's).
+The goal of this project is to obtain historical hyperlinks among a given set of International Organizations (IOs).
 The hyperlinks are retrieved from the oranizations' websites from 2012 up to 2019 via the Internet Archive.
 
 <!-- TABLE OF CONTENTS -->
@@ -43,16 +43,9 @@ The code in this project is released under [LICENSE.md](LICENSE).
 
 ### Attribution and academic use
 
-What to include here depends on the project type.
+The hyperlinks collected with the pipeline from this repository have been used in the following scientific publication:
+Bogers, M et al. _The impact of the Sustainable Development Goals on a network of 276 international organizations_(2022)
 
-If a paper has been published introducing this code, include a reference to that paper:
-[Example](https://github.com/OceanParcels/parcels#parcels-manuscript-and-code)
-
-If the software has been published on its own, include a reference to that:
-[Example](https://github.com/asreview/asreview#citation)
-
-If a dataset has been published from this repository, include a persistent link to the dataset:
-[Example](https://github.com/J535D165/CoronaWatchNL#license-and-academic-use)
 
 <!-- GETTING STARTED -->
 ## Getting Started
