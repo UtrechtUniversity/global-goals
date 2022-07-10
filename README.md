@@ -1,11 +1,11 @@
 # Global Goals
 
-<!-- Include Github badges here (optional) -->
-<!-- e.g. Github Actions workflow status -->
-![workflow name](https://github.com/UtrechtUniversity/<REPOSITORY>/workflows/<WORKFLOW_NAME_OR_FILE_PATH>/badge.svg)
-
-The goal of this project is to obtain historical hyperlinks among a given set of International Organizations (IOs).
+This repository describes an approach to obtain historical hyperlinks among a given set of International Organizations (IOs).
 The hyperlinks are retrieved from the oranizations' websites from 2012 up to 2019 via the Internet Archive.
+
+This approach is further developed in the Crunchbase project.
+For an improved and more generic version of the IA webscraping pipeline, check out the [ia-webscraping repository](https://github.com/UtrechtUniversity/ia-webscraping).
+
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
