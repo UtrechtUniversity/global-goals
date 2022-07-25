@@ -25,7 +25,7 @@ For an improved and more generic version of the IA webscraping pipeline, check o
 <!-- ABOUT THE PROJECT -->
 ## About the Project
 
-**Date**: Month Year
+**Date**: June 2022
 
 **Researcher(s)**:
 
@@ -44,13 +44,17 @@ The code in this project is released under [LICENSE.md](LICENSE).
 ### Attribution and academic use
 
 The hyperlinks collected with the pipeline from this repository have been used in the following scientific publication:
-Bogers, M et al. _The impact of the Sustainable Development Goals on a network of 276 international organizations_(2022)
+Bogers, M et al. [_The impact of the Sustainable Development Goals on a network of 276 international organizations_](https://www.sciencedirect.com/science/article/pii/S0959378022001054)(2022)
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
 Guide to get a local copy of this project up and running.
+```
+git clone https://github.com/UtrechtUniversity/global-goals.git
+```
+
 
 ### Prerequisites
 
@@ -59,19 +63,15 @@ To install and run this project you need to have the following prerequisites ins
 - Ansible
 - Python
 
-### Installation
-
-To run the project, ensure to install the project's dependencies.
-
-```sh
-pip install -r requirements.txt
-```
 
 <!-- USAGE -->
 ## Local Usage 
 
 The project consists of four stages as listed below. In short: 
-> cdx record -> html -> all links -> filtered links.
+- get list of cdx records
+- download html pages
+- extract all hyperlinks 
+- extract network hyperlinks.
 
 If a fairly large amount of url's needs to be obtained, multiple servers should be used. 
 These servers can be populated using Ansible, see [Ansible workflow](#ansible-workflow). In that case the workflow looks like:
@@ -98,7 +98,7 @@ The next step is to combine the timestamp and url_key to a working url, and fetc
 If there are many files to be fetched, multiple servers and Ansible should be used. This is described in section Ansible.
 
 ### Stage 3: Fetching links from html pages (link_lyxer)
-The third step is to convert html files to a list of links. The bash command `lynx` is used in a Python script called `link_lyxer.py`. The input is a directory in the following structure:
+The third step is to convert html files to a list of hyperlinks. This is done using the command line based web browser `lynx` in a Python script called `python/link_lyxer.py`. The input is a directory in the following structure:
 ```
 root
 |
@@ -113,7 +113,7 @@ uu.nl/20180806145630_uu.nl_en_research_research-data-management∞https://web.ar
 The source and destination are separated by a delimiter (`∞`), which was picked on it's low likelihood of occurring in an url. All slashes in the source have been replaced with `_`, as `/` can be used in a file name.
 
 ### Stage 4: Filtering links (ext_link_lister)
-TODO
+The Python regular expressions library is used in `python/ext_link_lister.py` to filter hyperlinks to organizations in the 'target' list from the list with all hyperlinks in from the previous step. 
 
 ## Ansible Workflow
 If a fairly large amount of url's needs to be obtained, multiple servers should be used. These servers can be populated using Ansible.
